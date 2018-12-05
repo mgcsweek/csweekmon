@@ -11,7 +11,7 @@ SUCCESS_RATE = 60
 
 def perform(user, other):
     """Perform Sap."""
-    if random.randint(user.stats['Special'], 100) > SUCCESS_RATE:
+    if random.randint(0, 100 - user.stats['Special']) > SUCCESS_RATE:
         print_ui('  It\'s ineffective!')
     else:
         decrease = min(other.stats['Defense'], max(1, int(0.2 * user.stats['Special'])))
