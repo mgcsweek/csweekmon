@@ -16,7 +16,7 @@ def perform(user, other):
     """Perform Sing."""
     print_ui('  ♪ The sound of {} singing fills the area. ♫'.format(user.name))
     delay_ui(1)
-    if random.randint(user.stats['Special'], 100) > SUCCESS_RATE or \
+    if random.randint(0, 100 - user.stats['Special']) > SUCCESS_RATE or \
             'Sleep' in other.stats['Effects']:
         print_ui('  It\'s ineffective!')
     else:

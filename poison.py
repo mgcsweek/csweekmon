@@ -14,7 +14,7 @@ SUCCESS_RATE = 70
 
 def perform(user, other):
     """Perform Poison."""
-    if random.randint(user.stats['Special'], 100) > SUCCESS_RATE or \
+    if random.randint(0, 100 - user.stats['Special']) > SUCCESS_RATE or \
             'Poison' in other.stats['Effects']:
         print_ui('  It\'s ineffective!')
     else:
