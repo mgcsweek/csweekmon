@@ -63,7 +63,6 @@ def verify(csweemon):
 
 def write_stats(turn_number, agent_fst, agent_snd):
     """Displays both players' basic stats on the screen."""
-#     print_ui('----------------------------------------')
     print_ui()
     print_ui('----- TURN {} ----------------------'.format(turn_number))
     print_ui('[{}]  HP: {}  PP: {}'.format(agent_fst.name,
@@ -71,7 +70,6 @@ def write_stats(turn_number, agent_fst, agent_snd):
     print_ui('[{}]  HP: {}  PP: {}'.format(agent_snd.name,
                                            agent_snd.stats['HP'], agent_snd.stats['PP']))
     print_ui()
-#     print_ui('----------------------------------------')
 
 
 def process_effects(agent_cur):
