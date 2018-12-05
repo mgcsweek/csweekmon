@@ -1,5 +1,5 @@
 # csweekmon
-Made for [CS Week v5.0](www.csnedelja.mg.edu.rs/ "mgcsweek website") in December 2018. This is a simple Python 3 miniproject whose goal is to program very simple AI agents for a [Pokemon](www.pokemon.com "Pokemon") style turn based RPG (only for the battle system). It comes with a few default AIs, used mainly for testing purposes.
+Made for [CS Week v5.0](http://www.csnedelja.mg.edu.rs/ "mgcsweek website") in December 2018. This is a simple Python 3 miniproject whose goal is to program very simple AI agents for a [Pokemon](https://www.pokemon.com "Pokemon") style turn based RPG (only for the battle system). It comes with a few default AIs, used mainly for testing purposes.
 
 ## Usage
 
