@@ -9,6 +9,7 @@ NAME = 'Blast'
 PP_COST = 8
 SUCCESS_RATE = 80
 CRIT_RATE = 15
+CAN_DISABLE = True
 
 def perform(user, other):
     """Perform Blast."""
