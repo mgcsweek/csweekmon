@@ -11,6 +11,7 @@ class Csweemon:
         self.stats['Max HP'] = self.stats['HP']
         self.stats['Max PP'] = self.stats['PP']
         self.stats['Effects'] = []
+        self.stats['Previous move'] = None
         self.stats['Recent damage'] = 0
         self.stats['Poison strength'] = 0
         self.name = self.stats['Name']
