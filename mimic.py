@@ -1,7 +1,8 @@
 """The implementation of the Mimic move.
 
-It performs the most recent move performed by the opponent (not action), no matter what type it was
-and whether it failed. It comes a constant cost. It can be Disabled.
+It performs the most recent move performed by the opponent (not action), no matter what type it was.
+It does not consider moves not performed due to lack of PP or Disable, but it does consider the ones
+that were ineffective. It comes a constant cost. It can be Disabled.
 """
 
 from utils import delay_ui, print_ui
