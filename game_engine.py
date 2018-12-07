@@ -13,7 +13,9 @@ import blast
 import blaze
 import counter
 import disable
+import drain
 import focus
+import glare
 import harden
 import kick
 import mimic
@@ -39,7 +41,9 @@ MOVES = [
     disable,
     kick,
     blaze,
-    mimic
+    mimic,
+    drain,
+    glare
 ]
 ITEMS = [
     cookie,
