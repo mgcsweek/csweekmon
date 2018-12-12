@@ -7,6 +7,7 @@ from utils import print_ui
 
 NAME = 'Harden'
 PP_COST = 5
+CAN_DISABLE = True
 
 def perform(user, _):
     """Perform Harden."""

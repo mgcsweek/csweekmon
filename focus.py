@@ -10,6 +10,7 @@ NAME = 'Focus'
 PP_COST = 4
 SUCCESS_RATE = 95
 CRIT_RATE = 10
+CAN_DISABLE = False
 
 def perform(user, _):
     """Perform Focus."""

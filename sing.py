@@ -11,6 +11,7 @@ NAME = 'Sing'
 PP_COST = 6
 SUCCESS_RATE = 50
 WAKEUP_RATE = 40
+CAN_DISABLE = True
 
 def perform(user, other):
     """Perform Sing."""

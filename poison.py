@@ -11,6 +11,7 @@ from utils import print_ui
 NAME = 'Poison'
 PP_COST = 5
 SUCCESS_RATE = 70
+CAN_DISABLE = True
 
 def perform(user, other):
     """Perform Poison."""

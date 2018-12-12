@@ -9,6 +9,7 @@ NAME = 'Tackle'
 PP_COST = 0
 SUCCESS_RATE = 90
 CRIT_RATE = 15
+CAN_DISABLE = False
 
 def perform(user, other):
     """Perform Tackle."""

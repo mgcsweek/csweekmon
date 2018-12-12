@@ -3,15 +3,22 @@
 # items
 import antidote
 import cookie
+import echo_screen
 import health_kit
 import power_potion
 import pp_restore
 
 # moves
 import blast
+import blaze
 import counter
+import disable
+import drain
 import focus
+import glare
 import harden
+import kick
+import mimic
 import poison
 import sap
 import sing
@@ -22,10 +29,37 @@ from utils import delay_ui, print_ui
 import strategies
 from strategies import Csweemon
 
-MOVES = [tackle, poison, counter, sing, harden, sap, blast, focus]
-ITEMS = [cookie, health_kit, power_potion, pp_restore, antidote]
-AGENTS = [strategies.RandomStrategy, strategies.SimpleStrategy, strategies.TankStrategy,
-          strategies.GlassCannonStrategy, strategies.HeavyHitStrategy]
+MOVES = [
+    tackle,
+    poison,
+    counter,
+    sing,
+    harden,
+    sap,
+    blast,
+    focus,
+    disable,
+    kick,
+    blaze,
+    mimic,
+    drain,
+    glare
+]
+ITEMS = [
+    cookie,
+    health_kit,
+    power_potion,
+    pp_restore,
+    antidote,
+    echo_screen
+]
+AGENTS = [
+    strategies.RandomStrategy,
+    strategies.SimpleStrategy,
+    strategies.TankStrategy,
+    strategies.GlassCannonStrategy,
+    strategies.HeavyHitStrategy
+]
 ALL_ACTIONS_COUNT = 3
 ALL_MOVES_COUNT = len(MOVES)
 ALL_ITEMS_COUNT = len(ITEMS)
@@ -96,6 +130,9 @@ def process_effects(agent_cur):
         delay_ui(1)
         if agent_cur.stats['HP'] <= 0:
             will_break = True
+    if 'Disable' in agent_cur.stats['Effects']:
+        print_ui('  {} is Disabled.'.format(agent_cur.name))
+        delay_ui(1)
     # Focus not processed here
     return will_break, will_skip
 
@@ -146,18 +183,21 @@ def run_battle(agent_fst, agent_snd):
             print_ui('  {} stumbles!'.format(agent_cur.name))
         if action == 0:     # use move
             if detail < 0 or detail >= MOVE_COUNT:
-                print_ui('  {} tries to attack, but stumbles!'.format(agent_cur.name))
+                print_ui('  {} tries to perform a move, but stumbles!'.format(agent_cur.name))
             else:
                 move = MOVES[agent_cur.stats['Moves'][detail]]
                 print_ui('  {} uses {}.'.format(agent_cur.name, move.NAME))
                 delay_ui(1)
-                if agent_cur.stats['PP'] >= move.PP_COST:
+                if agent_cur.stats['PP'] < move.PP_COST:
+                    print_ui('  But {} does not have enough PP!'.format(agent_cur.name))
+                elif 'Disabled' in agent_cur.stats['Effects'] and move.CAN_DISABLE:
+                    print_ui('  But {} is Disabled!'.format(agent_cur.name))
+                else:
                     agent_cur.stats['PP'] -= move.PP_COST
+                    agent_cur.stats['Previous move'] = move
                     move.perform(agent_cur, agent_oth)
                     if agent_oth.stats['HP'] <= 0:
                         break
-                else:
-                    print_ui('  But {} does not have enough PP!'.format(agent_cur.name))
         elif action == 1:   # use item
             if detail < 0 or detail >= MAX_ITEMS:
                 print_ui('  {} tries to use an item, but stumbles!'.format(agent_cur.name))
@@ -174,6 +214,9 @@ def run_battle(agent_fst, agent_snd):
                         print_ui('  {} uses a {}.'.format(agent_cur.name, item.NAME))
                     item.use(agent_cur, agent_oth)
                     agent_cur.stats['Items'][detail] = -1
+        elif action == 2:   # block
+            #TODO: implement block
+            print_ui('  Not implemented yet!')
     delay_ui(1)
     print_ui()
     print_ui()
