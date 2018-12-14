@@ -4,41 +4,60 @@ import sys
 
 import game_engine
 import strategies
-from strategies import Csweemon
+from csweemon import Csweemon
 
-AGENTS = [
+STRATEGIES = [
     strategies.RandomStrategy,
     strategies.SimpleStrategy,
     strategies.TankStrategy,
     strategies.GlassCannonStrategy,
     strategies.HeavyHitStrategy
 ]
-NAGENTS = len(AGENTS)
-POINTS = [0] * NAGENTS
+NSTRATEGIES = len(STRATEGIES)
+SCORES = dict()
 
 def main(argv):
     """Run tournament."""
     # TODO: parse command line arguments
-    for i in range(NAGENTS):
-        for j in range(NAGENTS):
+
+    # Validate strategies and make sure they have unique names
+    for strategy in STRATEGIES:
+        agent = Csweemon(strategy, True)
+        name = agent.stats['Name']
+        if name in SCORES:
+            print('Name {} used in two strategies, please change this and rerun.'.format(name))
+            exit(0)
+        if not game_engine.verify(agent):
+            print("Strategy {} disqualified: failed game engine verification.".format(name))
+            SCORES[name] = -1
+        SCORES[name] = 0
+
+    # Run the tournament
+    for i in range(NSTRATEGIES):
+        for j in range(NSTRATEGIES):
             if i != j:
-                csw1, csw2 = Csweemon(AGENTS[i], True), Csweemon(AGENTS[j], False)
-                if not game_engine.verify(csw1):
-                    POINTS[i] -= 1
-                    break
-                if not game_engine.verify(csw2):
-                    POINTS[j] -= 1
-                    break
+                csw1, csw2 = Csweemon(STRATEGIES[i], True), Csweemon(STRATEGIES[j], False)
+                if SCORES[csw1.name] == -1 or SCORES[csw2.name] == -1:
+                    continue
                 outcome = game_engine.run_battle(csw1, csw2)
                 if outcome != -1:
                     if outcome == 1:
-                        POINTS[i] += 1
+                        SCORES[csw1.name] += 1
                     else:
-                        POINTS[j] += 1
+                        SCORES[csw2.name] += 1
+
+    # print scoreboard
     print('SCOREBOARD:')
-    for i in range(NAGENTS):
-        agent = Csweemon(AGENTS[i], True)
-        print('  {}:    {}/{}'.format(agent.stats['Name'], POINTS[i], 2 * (NAGENTS - 1)))
+    print('|-rank-|--------name--------|-pts-|-mpl-|')
+    print('-'*41)
+    matches_played = 2 * (NSTRATEGIES - 1)
+    sorted_scores = sorted(SCORES.items(), key=lambda kv: kv[1], reverse=True)
+    rank = 1
+    for name, pts in sorted_scores:
+        print('|{}|{}|{}|{}|'.format(str(rank).center(6), name.center(20), 
+        str(pts).center(5), str(matches_played).center(5)))
+        rank += 1
+    print('-'*41)
 
 if __name__ == "__main__":
     main(sys.argv[1:])

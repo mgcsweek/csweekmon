@@ -1,31 +1,7 @@
 """A few default strategies."""
 
 import random
-
-class Csweemon:
-    """Class representing instances of fighters."""
-
-    def __init__(self, ai_strategy, is_first):
-        self.strategy = ai_strategy()
-        self.stats = self.strategy.set_initial_stats()
-        self.stats['Max HP'] = self.stats['HP']
-        self.stats['Max PP'] = self.stats['PP']
-        self.stats['Effects'] = []
-        self.stats['Previous move'] = None
-        self.stats['Recent damage'] = 0
-        self.stats['Poison strength'] = 0
-        self.name = self.stats['Name']
-        self.strategy.set_order_info(is_first)
-
-    def give_stats_info(self, other_stats):
-        """Forward information about own and enemy stats to underlying strategy."""
-        self.strategy.get_my_stats(self.stats)
-        self.strategy.receive_enemy_stats(other_stats)
-
-    def choose_action(self):
-        """Perform an action during own turn."""
-        return self.strategy.choose_action()
-
+from actions import Action
 
 class SimpleStrategy:
 
@@ -47,7 +23,7 @@ class SimpleStrategy:
     def set_order_info(self, is_first):
         pass
 
-    def get_my_stats(self, own_stats):
+    def receive_my_stats(self, own_stats):
         self.own_stats = own_stats
 
     def receive_enemy_stats(self, enemy_info):
@@ -56,12 +32,12 @@ class SimpleStrategy:
     def choose_action(self):
         if self.own_stats['HP'] <= 10 and self.used_cookies <= 10:
             self.used_cookies += 1
-            return 1, self.used_cookies - 1
+            return Action.USE_ITEM, self.used_cookies - 1
         if 'Sleep' not in self.enemy_stats['Effects'] and self.own_stats['PP'] >= 6:
-            return 0, 2
+            return Action.PERFORM_MOVE, 2
         if 'Poison' not in self.enemy_stats['Effects'] and self.own_stats['PP'] >= 5:
-            return 0, 1
-        return 0, 0
+            return Action.PERFORM_MOVE, 1
+        return Action.PERFORM_MOVE, 0
 
 
 class TankStrategy:
@@ -83,7 +59,7 @@ class TankStrategy:
     def set_order_info(self, is_first):
         pass
 
-    def get_my_stats(self, own_stats):
+    def receive_my_stats(self, own_stats):
         self.stats = own_stats
 
     def receive_enemy_stats(self, enemy_info):
@@ -92,8 +68,8 @@ class TankStrategy:
     def choose_action(self):
         if self.turn > 0:
             self.turn -= 1
-            return 0, 0
-        return 0, 1
+            return Action.PERFORM_MOVE, 0
+        return Action.PERFORM_MOVE, 1
 
 
 class GlassCannonStrategy:
@@ -114,7 +90,7 @@ class GlassCannonStrategy:
     def set_order_info(self, is_first):
         pass
 
-    def get_my_stats(self, own_stats):
+    def receive_my_stats(self, own_stats):
         self.stats = own_stats
 
     def receive_enemy_stats(self, enemy_info):
@@ -122,10 +98,10 @@ class GlassCannonStrategy:
 
     def choose_action(self):
         if self.stats['PP'] >= 26:
-            return 0, 1
+            return Action.PERFORM_MOVE, 1
         if self.stats['PP'] >= 8:
-            return 0, 2
-        return 0, 0
+            return Action.PERFORM_MOVE, 2
+        return Action.PERFORM_MOVE, 0
 
 
 class RandomStrategy:
@@ -146,14 +122,14 @@ class RandomStrategy:
     def set_order_info(self, is_first):
         pass
 
-    def get_my_stats(self, own_stats):
+    def receive_my_stats(self, own_stats):
         pass
 
     def receive_enemy_stats(self, enemy_info):
         pass
 
     def choose_action(self):
-        return 0, random.randint(0, 2)
+        return Action.PERFORM_MOVE, random.randint(0, 2)
 
 
 class HeavyHitStrategy:
@@ -177,7 +153,7 @@ class HeavyHitStrategy:
     def set_order_info(self, is_first):
         pass
 
-    def get_my_stats(self, own_stats):
+    def receive_my_stats(self, own_stats):
         self.stats = own_stats
 
     def receive_enemy_stats(self, enemy_info):
@@ -187,15 +163,15 @@ class HeavyHitStrategy:
         if self.stats['HP'] <= 20:
             if self.used_kits < 1:
                 self.used_kits += 1
-                return 1, 0
+                return Action.USE_ITEM, 0
             if self.used_cookies < 1:
                 self.used_cookies += 1
-                return 1, 1
+                return Action.USE_ITEM, 1
         if self.used_power < 1:
             self.used_power += 1
-            return 1, 2
+            return Action.USE_ITEM, 2
         if self.stats['PP'] >= 5 and self.stats['Recent damage'] >= 10:
-            return 0, 1
+            return Action.PERFORM_MOVE, 1
         if self.stats['PP'] >= 4:
-            return 0, 2
-        return 0, 0
+            return Action.PERFORM_MOVE, 2
+        return Action.PERFORM_MOVE, 0

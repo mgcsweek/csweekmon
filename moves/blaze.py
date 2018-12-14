@@ -12,7 +12,7 @@ CRIT_RATE = 15
 CAN_DISABLE = True
 
 def perform(user, other):
-    """Perform Blast."""
+    """Perform Blaze."""
     if random.randint(0, 100) < SUCCESS_RATE:
         if random.randint(0, 100) < CRIT_RATE:
             print_ui('  It\'s super effective!')

@@ -25,7 +25,7 @@ from moves import sing
 from moves import tackle
 
 from utils import delay_ui, print_ui
-
+from actions import Action
 
 MOVES = [
     tackle,
@@ -51,7 +51,6 @@ ITEMS = [
     antidote,
     echo_screen
 ]
-ALL_ACTIONS_COUNT = 3
 ALL_MOVES_COUNT = len(MOVES)
 ALL_ITEMS_COUNT = len(ITEMS)
 MOVE_COUNT = 3
@@ -168,9 +167,7 @@ def run_battle(agent_fst, agent_snd):
                 continue
         action, detail = agent_cur.choose_action()
         # process the player's decision
-        if action >= ALL_ACTIONS_COUNT or action < 0:
-            print_ui('  {} stumbles!'.format(agent_cur.name))
-        if action == 0:     # use move
+        if action == Action.PERFORM_MOVE:     # use move
             if detail < 0 or detail >= MOVE_COUNT:
                 print_ui('  {} tries to perform a move, but stumbles!'.format(agent_cur.name))
             else:
@@ -187,7 +184,7 @@ def run_battle(agent_fst, agent_snd):
                     move.perform(agent_cur, agent_oth)
                     if agent_oth.stats['HP'] <= 0:
                         break
-        elif action == 1:   # use item
+        elif action == Action.USE_ITEM:   # use item
             if detail < 0 or detail >= MAX_ITEMS:
                 print_ui('  {} tries to use an item, but stumbles!'.format(agent_cur.name))
             else:
@@ -203,9 +200,12 @@ def run_battle(agent_fst, agent_snd):
                         print_ui('  {} uses a {}.'.format(agent_cur.name, item.NAME))
                     item.use(agent_cur, agent_oth)
                     agent_cur.stats['Items'][detail] = -1
-        elif action == 2:   # block
+        elif action == Action.BLOCK:   # block
             #TODO: implement block
             print_ui('  Not implemented yet!')
+        else:
+            print_ui('  {} stumbles!'.format(agent_cur.name))
+
     delay_ui(1)
     print_ui()
     print_ui()
