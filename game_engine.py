@@ -1,33 +1,31 @@
-"""Main game engine and tournament evaluation."""
+"""Main battle system implementation."""
 
 # items
-import antidote
-import cookie
-import echo_screen
-import health_kit
-import power_potion
-import pp_restore
+from items import antidote
+from items import cookie
+from items import echo_screen
+from items import health_kit
+from items import power_potion
+from items import pp_restore
 
 # moves
-import blast
-import blaze
-import counter
-import disable
-import drain
-import focus
-import glare
-import harden
-import kick
-import mimic
-import poison
-import sap
-import sing
-import tackle
+from moves import blast
+from moves import blaze
+from moves import counter
+from moves import disable
+from moves import drain
+from moves import focus
+from moves import glare
+from moves import harden
+from moves import kick
+from moves import mimic
+from moves import poison
+from moves import sap
+from moves import sing
+from moves import tackle
 
 from utils import delay_ui, print_ui
 
-import strategies
-from strategies import Csweemon
 
 MOVES = [
     tackle,
@@ -53,18 +51,9 @@ ITEMS = [
     antidote,
     echo_screen
 ]
-AGENTS = [
-    strategies.RandomStrategy,
-    strategies.SimpleStrategy,
-    strategies.TankStrategy,
-    strategies.GlassCannonStrategy,
-    strategies.HeavyHitStrategy
-]
 ALL_ACTIONS_COUNT = 3
 ALL_MOVES_COUNT = len(MOVES)
 ALL_ITEMS_COUNT = len(ITEMS)
-NAGENTS = len(AGENTS)
-POINTS = [0] * NAGENTS
 MOVE_COUNT = 3
 MAX_ITEMS = 10
 MAX_COST = 500
@@ -228,26 +217,3 @@ def run_battle(agent_fst, agent_snd):
     print_ui('============================================================')
     print_ui()
     return current_player
-
-
-for i in range(NAGENTS):
-    for j in range(NAGENTS):
-        if i != j:
-            csw1, csw2 = Csweemon(AGENTS[i], True), Csweemon(AGENTS[j], False)
-            if not verify(csw1):
-                POINTS[i] -= 1
-                break
-            if not verify(csw2):
-                POINTS[j] -= 1
-                break
-            outcome = run_battle(csw1, csw2)
-            if outcome != -1:
-                if outcome == 1:
-                    POINTS[i] += 1
-                else:
-                    POINTS[j] += 1
-
-print('SCOREBOARD:')
-for i in range(NAGENTS):
-    agent = Csweemon(AGENTS[i], True)
-    print('  {}:    {}/{}'.format(agent.stats['Name'], POINTS[i], 2 * (NAGENTS - 1)))
