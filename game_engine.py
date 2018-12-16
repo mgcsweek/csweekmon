@@ -59,7 +59,7 @@ MAX_COST = 500
 STAT_POINTS = 100
 HP_W, PP_W, STR_W, DEF_W, SPEC_W = 1, 1, 2, 2, 2
 
-def verify(csweemon):
+def verify(csweemon, max_cost=MAX_COST, stat_points=STAT_POINTS):
     """Verify that the players have valid initialisation."""
     item_cost = [x.COST for x in ITEMS]
     stats = csweemon.stats
@@ -74,12 +74,12 @@ def verify(csweemon):
     return (all([x >= 0 for x in [ppoints, strength, defense, special]])
             and health > 0
             and HP_W * health + PP_W * ppoints + STR_W * strength + \
-                    DEF_W * defense + SPEC_W * special == STAT_POINTS
+                    DEF_W * defense + SPEC_W * special <= stat_points
             and len(moves) == MOVE_COUNT
             and all([i in range(ALL_MOVES_COUNT) for i in moves])
             and len(items) <= MAX_ITEMS
             and all([i in range(ALL_ITEMS_COUNT) for i in items])
-            and sum([item_cost[i] for i in items]) <= MAX_COST
+            and sum([item_cost[i] for i in items]) <= max_cost
             and effects == [])
 
 
