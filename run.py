@@ -1,9 +1,10 @@
 """Entry point for the game."""
 
-import sys
+import argparse
 
 import game_engine
 import strategies
+from utils import Printer
 from csweemon import Csweemon
 
 STRATEGIES = [
@@ -16,10 +17,8 @@ STRATEGIES = [
 NSTRATEGIES = len(STRATEGIES)
 SCORES = dict()
 
-def main(argv):
+def main():
     """Run tournament."""
-    # TODO: parse command line arguments
-
     # Validate strategies and make sure they have unique names
     for strategy in STRATEGIES:
         agent = Csweemon(strategy, True)
@@ -33,19 +32,27 @@ def main(argv):
         SCORES[name] = 0
 
     # Run the tournament
+    battle_idx = 0
+    num_battles = NSTRATEGIES * (NSTRATEGIES - 1)
     for i in range(NSTRATEGIES):
         for j in range(NSTRATEGIES):
             if i != j:
+                battle_idx += 1
                 csw1, csw2 = Csweemon(STRATEGIES[i], True), Csweemon(STRATEGIES[j], False)
+                print('###Battle {}/{}: {} vs {}'.format(battle_idx, num_battles,
+                                                         csw1.name, csw2.name))
                 if SCORES[csw1.name] == -1 or SCORES[csw2.name] == -1:
+                    print('   Battle skipped, at least one competitor was DQ!')
                     continue
                 outcome = game_engine.run_battle(csw1, csw2)
-                if outcome != -1:
-                    if outcome == 1:
-                        SCORES[csw1.name] += 1
-                    else:
-                        SCORES[csw2.name] += 1
-
+                if outcome == 1:
+                    SCORES[csw1.name] += 1
+                    print('   Winner: {}'.format(csw1.name))
+                elif outcome == 2:
+                    SCORES[csw2.name] += 1
+                    print('   Winner: {}'.format(csw2.name))
+                else:
+                    print('   It\'s a draw!')
     # print scoreboard
     print('SCOREBOARD:')
     print('|-rank-|--------name--------|-pts-|-mpl-|')
@@ -54,10 +61,18 @@ def main(argv):
     sorted_scores = sorted(SCORES.items(), key=lambda kv: kv[1], reverse=True)
     rank = 1
     for name, pts in sorted_scores:
-        print('|{}|{}|{}|{}|'.format(str(rank).center(6), name.center(20), 
-        str(pts).center(5), str(matches_played).center(5)))
+        print('|{}|{}|{}|{}|'.format(str(rank).center(6), name.center(20),
+                                     str(pts).center(5), str(matches_played).center(5)))
         rank += 1
     print('-'*41)
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    PARSER = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    PARSER.add_argument('--no-verbose', action='store_true',
+                        help='disable verbose output of the matches (skip to final scoreboard')
+    PARSER.add_argument('--delay', type=float, metavar='D', default=1.0,
+                        help='number of seconds between ui ticks if verbose mode is on')
+    ARGS = PARSER.parse_args()
+    Printer.VERBOSE_OUTPUT = not ARGS.no_verbose
+    Printer.DELAY = ARGS.delay
+    main()

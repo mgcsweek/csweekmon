@@ -6,6 +6,7 @@ class Csweemon:
         self.stats = self.strategy.set_initial_stats()
         self.stats['Max HP'] = self.stats['HP']
         self.stats['Max PP'] = self.stats['PP']
+        self.stats['Base Defense'] = self.stats['Defense']
         self.stats['Effects'] = []
         self.stats['Previous move'] = None
         self.stats['Recent damage'] = 0

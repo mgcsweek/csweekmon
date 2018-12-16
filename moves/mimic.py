@@ -5,7 +5,7 @@ It does not consider moves not performed due to lack of PP or Disable, but it do
 that were ineffective. It comes a constant cost. It can be Disabled.
 """
 
-from utils import delay_ui, print_ui
+from utils import Printer
 
 NAME = 'Mimic'
 PP_COST = 9
@@ -15,9 +15,9 @@ def perform(user, other):
     """Perform Mimic."""
     move = other.stats['Previous move']
     if move is not None:
-        print_ui('  {} mimics {} using {}.'.format(user.NAME, other.NAME, move.NAME))
-        delay_ui(1)
+        Printer.print_ui('  {} mimics {} using {}.'.format(user.NAME, other.NAME, move.NAME))
+        Printer.delay_ui(1)
         user.stats['Previous move'] = move
         move.perform(user, other)
     else:
-        print_ui('  It\'s ineffective!')
+        Printer.print_ui('  It\'s ineffective!')

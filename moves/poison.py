@@ -6,7 +6,7 @@ effectiveness is increased the higher the user's Special stat is.
 """
 
 import random
-from utils import print_ui
+from utils import Printer
 
 NAME = 'Poison'
 PP_COST = 5
@@ -17,9 +17,9 @@ def perform(user, other):
     """Perform Poison."""
     if random.randint(0, 100 - user.stats['Special']) > SUCCESS_RATE or \
             'Poison' in other.stats['Effects']:
-        print_ui('  It\'s ineffective!')
+        Printer.print_ui('  It\'s ineffective!')
     else:
-        print_ui('  {} is now poisoned!'.format(other.name))
+        Printer.print_ui('  {} is now poisoned!'.format(other.name))
         other.stats['Effects'].append('Poison')
         other.stats['Poison Strength'] = max(user.stats['Special'] * 0.5, 8)
 

@@ -1,3 +1,5 @@
+"""Definitions of actions."""
+
 from enum import Enum
 
 class Action(Enum):

@@ -2,7 +2,7 @@
 
 This item restores 25 PP."""
 
-from utils import print_ui
+from utils import Printer
 
 COST = 200
 NAME = 'PP Restore'
@@ -12,4 +12,4 @@ def use(user, _):
     new_pp = min(user.stats['PP'] + 25, user.stats['Max PP'])
     increase = new_pp - user.stats['PP']
     user.stats['PP'] = new_pp
-    print_ui('  {} PP restored!'.format(increase))
+    Printer.print_ui('  {} PP restored!'.format(increase))

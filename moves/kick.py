@@ -3,7 +3,7 @@
 The most basic physical attack. It costs nothing and has no special side effects."""
 
 import random
-from utils import delay_ui, print_ui
+from utils import Printer
 
 NAME = 'Kick'
 PP_COST = 0
@@ -15,17 +15,17 @@ def perform(user, other):
     """Perform Kick."""
     if random.randint(0, 100) < SUCCESS_RATE:
         if random.randint(0, 100) < CRIT_RATE:
-            print_ui('  It\'s super effective!')
-            delay_ui(1)
+            Printer.print_ui('  It\'s super effective!')
+            Printer.delay_ui(1)
             base_damage = max(0, 0.8 * user.stats['Strength'] - 0.1 * other.stats['Defense'])
         else:
             base_damage = max(0, 0.6 * user.stats['Strength'] - 0.2 * other.stats['Defense'])
         damage = max(1, random.randint(int(0.8 * base_damage), int(1.2 * base_damage) + 1))
         if damage == 1:
-            print_ui('  It deals {} point of damage.'.format(damage))
+            Printer.print_ui('  It deals {} point of damage.'.format(damage))
         else:
-            print_ui('  It deals {} points of damage.'.format(damage))
+            Printer.print_ui('  It deals {} points of damage.'.format(damage))
         other.recent_damage = damage
         other.stats['HP'] -= damage
     else:
-        print_ui('  It\'s ineffective!')
+        Printer.print_ui('  It\'s ineffective!')

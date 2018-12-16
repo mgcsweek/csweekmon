@@ -2,15 +2,18 @@
 
 import time
 
-VERBOSE_OUTPUT = True
-TIME_SCALE = 1
+class Printer:
+    VERBOSE_OUTPUT = True
+    DELAY = 1
 
-def print_ui(text=''):
-    """Print text to standard output if verbose output set."""
-    if VERBOSE_OUTPUT:
-        print(text)
+    @staticmethod
+    def print_ui(text=''):
+        """Print text to standard output if verbose output set."""
+        if Printer.VERBOSE_OUTPUT:
+            print(text)
 
-def delay_ui(seconds):
-    """Delay for a certain number of seconds if verbose output set."""
-    if VERBOSE_OUTPUT:
-        time.sleep(seconds * TIME_SCALE)
+    @staticmethod
+    def delay_ui(seconds):
+        """Delay for a certain number of seconds if verbose output set."""
+        if Printer.VERBOSE_OUTPUT:
+            time.sleep(seconds * Printer.DELAY)

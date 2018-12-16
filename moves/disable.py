@@ -6,7 +6,7 @@ user's Special.
 """
 
 import random
-from utils import print_ui
+from utils import Printer
 
 NAME = 'Disable'
 PP_COST = 7
@@ -17,7 +17,7 @@ def perform(user, other):
     """Perform Disable."""
     if random.randint(0, 100 - user.stats['Special']) > SUCCESS_RATE or \
             'Disable' in other.stats['Effects']:
-        print_ui('  It\'s ineffective!')
+        Printer.print_ui('  It\'s ineffective!')
     else:
-        print_ui('  {} is now unable to perform certain moves!'.format(other.name))
+        Printer.print_ui('  {} is now unable to perform certain moves!'.format(other.name))
         other.stats['Effects'].append('Disable')

@@ -5,7 +5,7 @@ be able to perform any actions until they wake up.
 """
 
 import random
-from utils import delay_ui, print_ui
+from utils import Printer
 
 NAME = 'Sing'
 PP_COST = 6
@@ -15,13 +15,13 @@ CAN_DISABLE = True
 
 def perform(user, other):
     """Perform Sing."""
-    print_ui('  ♪ The sound of {} singing fills the area. ♫'.format(user.name))
-    delay_ui(1)
+    Printer.print_ui('  ♪ The sound of {} singing fills the area. ♫'.format(user.name))
+    Printer.delay_ui(1)
     if random.randint(0, 100 - user.stats['Special']) > SUCCESS_RATE or \
             'Sleep' in other.stats['Effects']:
-        print_ui('  It\'s ineffective!')
+        Printer.print_ui('  It\'s ineffective!')
     else:
-        print_ui('  {} is now asleep!'.format(other.name))
+        Printer.print_ui('  {} is now asleep!'.format(other.name))
         other.stats['Effects'].append('Sleep')
 
 def wakeup():
