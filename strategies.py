@@ -1,7 +1,14 @@
 """A few default strategies."""
 
 import random
+
+from utils import print_ui
 from actions import Action
+
+from game_engine import MOVES, ITEMS, MOVE_COUNT, MAX_ITEMS, MAX_COST, STAT_POINTS
+from game_engine import HP_W, PP_W, STR_W, DEF_W, SPEC_W
+ALL_MOVES_COUNT = len(MOVES)
+ALL_ITEMS_COUNT = len(ITEMS)
 
 class SimpleStrategy:
 
@@ -219,3 +226,108 @@ class HeavyHitStrategy:
         if self.stats['PP'] >= 4:
             return Action.PERFORM_MOVE, 2
         return Action.PERFORM_MOVE, 0
+
+
+class HumanStrategy:
+
+    def __init__(self):
+        self.my_stats = {}
+        self.enemy_stats = {}
+
+    def set_initial_stats(self):
+        print_ui('***********************************')
+        print_ui('        Initialise stats')
+        name = 'Human'
+
+        points_left = STAT_POINTS
+        stats = {'HP': (0, HP_W),
+                 'PP': (0, PP_W),
+                 'Strength': (0, STR_W),
+                 'Defense': (0, DEF_W),
+                 'Special': (0, SPEC_W)}
+        while points_left > 0:
+            print_ui('Options: ({} points remaining)'.format(points_left))
+            for key, val in stats.items():
+                print_ui(' * \'{} n\' - Increase {} by at most {}'.format(key, key,
+                                                                          points_left // val[1]))
+            inp = input()
+            inp = inp.split(' ')
+            if len(inp) != 2:
+                continue
+            if inp[0] in [x for x, y in stats.items()]:
+                points, weight = stats[inp[0]]
+                if inp[1].isdigit:
+                    stats[inp[0]] = (points + int(inp[1]), weight)
+                points_left = points_left - weight * int(inp[1])
+
+        moves = []
+        while len(moves) < MOVE_COUNT:
+            print_ui('Options:')
+            for i, move in enumerate(MOVES):
+                print_ui(' * \'{}\' - Add move {}'.format(i, move.NAME))
+            inp = input()
+            if inp.isdigit():
+                moves.append(int(inp))
+
+        items = []
+
+        item_cost = [x.COST for x in ITEMS]
+        money_remaining = MAX_COST
+        while money_remaining >= min([item_cost[i] for i in range(ALL_ITEMS_COUNT)]) and \
+              len(items) < MAX_ITEMS:
+            print_ui('Options: ({} credits remaining)'.format(money_remaining))
+            for i in range(ALL_ITEMS_COUNT):
+                if item_cost[i] <= money_remaining:
+                    print_ui(' * \'{}\' - Buy {} ({} credits)'.format(i + 1, ITEMS[i].NAME,
+                                                                      ITEMS[i].COST))
+            inp = input()
+            if inp.isdigit():
+                if int(inp) in range(1, ALL_ITEMS_COUNT + 1):
+                    items.append(int(inp) - 1)
+                    money_remaining -= ITEMS[int(inp) - 1].COST
+                else:
+                    break
+
+        return {'Name': name,
+                'HP': stats['HP'][0],
+                'PP': stats['PP'][0],
+                'Strength': stats['Strength'][0],
+                'Defense': stats['Defense'][0],
+                'Special': stats['Special'][0],
+                'Moves': moves,
+                'Items': items}
+
+    def set_order_info(self, is_first):
+        pass
+
+    def receive_my_stats(self, own_stats):
+        self.my_stats = own_stats
+
+    def receive_enemy_stats(self, enemy_info):
+        self.enemy_stats = enemy_info
+
+    def choose_action(self):
+        print_ui('***********************************')
+        print_ui('        Choose Action')
+        print_ui('Options:')
+        for i in range(len(self.my_stats['Moves'])):
+            move = self.my_stats['Moves'][i]
+            print_ui(' * \'move {}\' - Perform {}'.format(i, MOVES[move].NAME))
+        for i, item in enumerate(self.my_stats['Items']):
+            if item != -1:
+                print_ui(' * \'item {}\' - Use {}'.format(i, ITEMS[item].NAME))
+        print_ui(' * \'block\'  - Perform Block')
+
+        while True:
+            inp = input()
+            if inp == 'block':
+                return Action.BLOCK, 0
+
+            inp = inp.split(' ')
+
+            if len(inp) == 2 and inp[1].isdigit():
+                if inp[0] == 'move':
+                    return Action.PERFORM_MOVE, int(inp[1])
+                if inp[0] == 'item':
+                    return Action.USE_ITEM, int(inp[1])
+            print_ui('Invalid command!')

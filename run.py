@@ -8,12 +8,9 @@ from utils import Printer
 from csweekmon import Csweekmon
 
 STRATEGIES = [
-    strategies.GlassCannonStrategy,
-    strategies.HeavyHitStrategy,
-    strategies.HugePowerStrategy,
-    strategies.TankStrategy,
+    strategies.HumanStrategy,
     strategies.RandomStrategy,
-    strategies.SimpleStrategy,
+    strategies.SimpleStrategy
 ]
 NSTRATEGIES = len(STRATEGIES)
 SCORES = dict()
@@ -30,6 +27,8 @@ def main():
         if not game_engine.verify(agent):
             print("Strategy {} disqualified: failed game engine verification.".format(name))
             SCORES[name] = -1
+        else:
+            print('Strategy {} is valid.'.format(name))
         SCORES[name] = 0
 
     # Run the tournament
@@ -46,14 +45,18 @@ def main():
                     print('   Battle skipped, at least one competitor was DQ!')
                     continue
                 outcome = game_engine.run_battle(csw1, csw2)
+                
                 if outcome == 1:
-                    SCORES[csw1.name] += 1
+                    SCORES[csw1.name] += 3
                     print('   Winner: {}'.format(csw1.name))
                 elif outcome == 2:
-                    SCORES[csw2.name] += 1
+                    SCORES[csw2.name] += 3
                     print('   Winner: {}'.format(csw2.name))
                 else:
+                    SCORES[csw1.name] += 1
+                    SCORES[csw2.name] += 1
                     print('   It\'s a draw!')
+
     # print scoreboard
     print('SCOREBOARD:')
     print('|-rank-|--------name--------|-pts-|-mpl-|')
