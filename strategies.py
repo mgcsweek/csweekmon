@@ -72,10 +72,52 @@ class TankStrategy:
         return Action.PERFORM_MOVE, 1
 
 
+class HugePowerStrategy:
+
+    def __init__(self):
+        self.stats = {}
+        self.enemy_stats = {}
+        self.cookies_left = 10
+
+    def set_initial_stats(self):
+        return {'Name': 'Huge Power',
+                'HP': 35,
+                'PP': 35,
+                'Strength': 0,
+                'Defense': 5,
+                'Special': 10,
+                'Moves': [6, 10, 12],
+                'Items': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}
+
+    def set_order_info(self, is_first):
+        pass
+
+    def receive_my_stats(self, own_stats):
+        self.stats = own_stats
+
+    def receive_enemy_stats(self, enemy_info):
+        self.enemy_stats = enemy_info
+
+    def choose_action(self):
+        if self.enemy_stats['Previous move'] == 'Focus':
+            return Action.BLOCK, 0
+        if self.stats['HP'] <= 15:
+            if self.stats['PP'] >= 6:
+                return Action.PERFORM_MOVE, 2
+            if self.cookies_left > 0:
+                self.cookies_left -= 1
+                return Action.USE_ITEM, self.cookies_left
+        if self.stats['PP'] >= 14:
+            return Action.PERFORM_MOVE, 1
+        if self.stats['PP'] >= 8:
+            return Action.PERFORM_MOVE, 0
+        return Action.BLOCK, 0
+
 class GlassCannonStrategy:
 
     def __init__(self):
         self.stats = {}
+        self.enemy_stats = {}
 
     def set_initial_stats(self):
         return {'Name': 'Glass Cannon',
@@ -94,9 +136,11 @@ class GlassCannonStrategy:
         self.stats = own_stats
 
     def receive_enemy_stats(self, enemy_info):
-        pass
+        self.enemy_stats = enemy_info
 
     def choose_action(self):
+        if self.enemy_stats['Previous move'] == 'Focus':
+            return Action.BLOCK, 0
         if self.stats['PP'] >= 26:
             return Action.PERFORM_MOVE, 1
         if self.stats['PP'] >= 8:

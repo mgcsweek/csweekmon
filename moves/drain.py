@@ -18,12 +18,13 @@ def perform(user, other):
         if random.randint(0, 99) < CRIT_RATE:
             Printer.print_ui('  It\'s super effective!')
             Printer.delay_ui(1)
-            base_damage = max(0, 0.6 * user.stats['Special'])
+            base_damage = max(0, 1.2 * user.stats['Special'])
         else:
-            base_damage = max(0, 0.4 * user.stats['Special'] - 0.2 * other.stats['Defense'])
-        damage = max(1, random.randint(int(0.8 * base_damage), int(1.2 * base_damage) + 1),
+            base_damage = max(0, user.stats['Special'] - 0.2 * other.stats['Defense'])
+        Printer.print_ui(base_damage)
+        damage = min(max(1, random.randint(int(0.8 * base_damage), int(1.2 * base_damage) + 1)),
                      other.stats['HP'])
-        Printer.print_ui('  {} drains {} HP from {}.'.format(user.NAME, damage, other.NAME))
+        Printer.print_ui('  {} drains {} HP from {}.'.format(user.name, damage, other.name))
         other.stats['HP'] -= damage
         user.stats['HP'] = min(user.stats['Max HP'], user.stats['HP'] + damage)
     else:

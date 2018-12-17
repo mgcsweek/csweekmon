@@ -209,7 +209,7 @@ def run_battle(agent_fst, agent_snd):
             # temporary increase in Defense
             agent_cur.stats['Defense'] += randint(8, 12)
             # restore 3 to 5 PP
-            agent_cur.stats['PP'] = max(agent_cur.stats['Max PP'],
+            agent_cur.stats['PP'] = min(agent_cur.stats['Max PP'],
                                         agent_cur.stats['PP'] + randint(3, 5))
         else:
             Printer.print_ui('  {} stumbles!'.format(agent_cur.name))

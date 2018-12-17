@@ -8,11 +8,12 @@ from utils import Printer
 from csweekmon import Csweekmon
 
 STRATEGIES = [
+    strategies.GlassCannonStrategy,
+    strategies.HeavyHitStrategy,
+    strategies.HugePowerStrategy,
+    strategies.TankStrategy,
     strategies.RandomStrategy,
     strategies.SimpleStrategy,
-    strategies.TankStrategy,
-    strategies.GlassCannonStrategy,
-    strategies.HeavyHitStrategy
 ]
 NSTRATEGIES = len(STRATEGIES)
 SCORES = dict()

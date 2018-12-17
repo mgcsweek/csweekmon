@@ -22,7 +22,7 @@ def perform(user, other):
             base_damage = 0.3 * user.stats['Special']
         damage = max(1, random.randint(int(0.8 * base_damage), int(1.2 * base_damage) + 1),
                      other.stats['PP'])
-        Printer.print_ui('  {} loses {} PP'.format(other.NAME, damage))
+        Printer.print_ui('  {} loses {} PP'.format(other.name, damage))
         other.stats['PP'] -= damage
     else:
         Printer.print_ui('  It\'s ineffective!')
