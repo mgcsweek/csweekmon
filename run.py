@@ -5,7 +5,7 @@ import argparse
 import game_engine
 import strategies
 from utils import Printer
-from csweemon import Csweemon
+from csweekmon import Csweekmon
 
 STRATEGIES = [
     strategies.RandomStrategy,
@@ -21,7 +21,7 @@ def main():
     """Run tournament."""
     # Validate strategies and make sure they have unique names
     for strategy in STRATEGIES:
-        agent = Csweemon(strategy, True)
+        agent = Csweekmon(strategy, True)
         name = agent.stats['Name']
         if name in SCORES:
             print('Name {} used in two strategies, please change this and rerun.'.format(name))
@@ -38,7 +38,7 @@ def main():
         for j in range(NSTRATEGIES):
             if i != j:
                 battle_idx += 1
-                csw1, csw2 = Csweemon(STRATEGIES[i], True), Csweemon(STRATEGIES[j], False)
+                csw1, csw2 = Csweekmon(STRATEGIES[i], True), Csweekmon(STRATEGIES[j], False)
                 print('###Battle {}/{}: {} vs {}'.format(battle_idx, num_battles,
                                                          csw1.name, csw2.name))
                 if SCORES[csw1.name] == -1 or SCORES[csw2.name] == -1:

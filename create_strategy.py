@@ -2,7 +2,7 @@
 
 import re
 
-from csweemon import Csweemon
+from csweekmon import Csweekmon
 import game_engine
 import strategies
 
@@ -63,7 +63,7 @@ if __name__ == '__main__':
     STAT_POINTS = 100
     CONTESTANT_NAME = controlled_string_input('Strategy name: ')
     CSWEEKMON_NAME = controlled_string_input('Csweekmon name: ')
-    CSW = Csweemon(strategies.RandomStrategy, False)
+    CSW = Csweekmon(strategies.RandomStrategy, False)
     CSW.name = CSWEEKMON_NAME
     while True:
         STAT_POINTS = controlled_int_input('Allocated stat points: ', 300)

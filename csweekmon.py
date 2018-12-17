@@ -1,4 +1,4 @@
-class Csweemon:
+class Csweekmon:
     """Class representing instances of fighters."""
 
     def __init__(self, ai_strategy, is_first):
