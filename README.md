@@ -17,9 +17,6 @@ You can use the `--no-verbose` flag to suppress most of the output, and `--delay
 python3 run.py --delay=0.5
 ```
 
-### Settings
-If you want to speed up the text crawl, set the `delay` command-line flag. If you want to remove text completely and just get the final scoreboard set the `no-verbose` flag. Use `python3 run.py --help` for help with flags.
-
 ### Adding your own AI
 You will need to create your own strategy in a separate file, for example `<file>.py`. It should look like a class resembling the ones in `strategies.py`. To get your AI to compete in a tournament, simply edit `run.py` and modify it slightly:
  - at the top:
