@@ -12,6 +12,8 @@ This will start a text crawl that shows the progress of the battle.
 
 The only reason why `python3` is used is for more cosmetic features: Unicode characters feature in the text crawl.
 
+You can use the `--no-verbose` flag to suppress most of the output, and `--delay t` to change the delay between messages being displayed.
+
 ### Settings
 If you want to speed up the text crawl, set the `delay` command-line flag. If you want to remove text completely and just get the final scoreboard set the `no-verbose` flag. Use `python3 run.py --help` for help with flags.
 
@@ -22,10 +24,8 @@ You will need to create your own strategy in a separate file, for example `<file
 import <file>
 ```
  - add your class to the `STRATEGIES` list
+
+You can either adapt the existing code or use the helper `create_strategy.py` program.
+
 If you managed to do this right, your AI will start competing in a tournament the next time you run `run.py`.
 
-## TODO (wish list)
- - Add a `Human` strategy, where the user controls the battle.
- - Add a `strategy_gen.py`, which would be a standalone application that generates a new strategy class and file.
- - Work on improving overall balance.
- - UI tweaks (possibly settable, and maybe use `ncurses`).
