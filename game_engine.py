@@ -112,11 +112,17 @@ def process_effects(agent_cur):
             agent_cur.stats['Effects'].remove('Sleep')
             Printer.delay_ui(1)
         else:
-            Printer.print_ui('  {} is still asleep.'.format(agent_cur.name))
+            try:
+                Printer.print_ui('  {} is still asleep. 💤'.format(agent_cur.name))
+            except UnicodeEncodeError:
+                Printer.print_ui('  {} is still asleep. *Zzz*'.format(agent_cur.name))
             will_skip = True
     if 'Poison' in agent_cur.stats['Effects']:
         damage = poison.latent(agent_cur)
-        Printer.print_ui('  {} loses {} HP due to Poison! ☠'.format(agent_cur.name, damage))
+        try:
+            Printer.print_ui('  {} loses {} HP due to Poison! ☠'.format(agent_cur.name, damage))
+        except UnicodeEncodeError:
+            Printer.print_ui('  {} loses {} HP due to Poison!'.format(agent_cur.name, damage))
         agent_cur.stats['HP'] -= damage
         Printer.delay_ui(1)
         if agent_cur.stats['HP'] <= 0:
