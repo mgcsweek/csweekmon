@@ -13,8 +13,8 @@ CAN_DISABLE = True
 
 def perform(user, other):
     """Perform Blaze."""
-    if random.randint(0, 100) < SUCCESS_RATE:
-        if random.randint(0, 100) < CRIT_RATE:
+    if random.randint(0, 99) < SUCCESS_RATE:
+        if random.randint(0, 99) < CRIT_RATE:
             Printer.print_ui('  It\'s super effective!')
             Printer.delay_ui(1)
             base_damage = max(0, 2 * user.stats['Special'])

@@ -22,8 +22,8 @@ def finally_perform(user, other):
     user.stats['Effects'].remove('Focus')
     Printer.print_ui('  {} attacks with all its might!'.format(user.name))
     Printer.delay_ui(1)
-    if random.randint(0, 100) < SUCCESS_RATE:
-        if random.randint(0, 100) < CRIT_RATE:
+    if random.randint(0, 99) < SUCCESS_RATE:
+        if random.randint(0, 99) < CRIT_RATE:
             Printer.print_ui('  It\'s super effective!')
             Printer.delay_ui(1)
             base_damage = max(0, 2 * user.stats['Strength'] - 0.8 * other.stats['Defense'])

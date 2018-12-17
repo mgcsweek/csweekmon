@@ -10,6 +10,6 @@ NAME = 'Power Potion'
 
 def use(user, _):
     """Use a Power Potion."""
-    increase = random.randint(4, 7)
+    increase = random.randint(4, 6)
     user.stats['Strength'] += increase
     Printer.print_ui('  Strength boosted by {}.'.format(increase))

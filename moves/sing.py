@@ -17,7 +17,7 @@ def perform(user, other):
     """Perform Sing."""
     Printer.print_ui('  ♪ The sound of {} singing fills the area. ♫'.format(user.name))
     Printer.delay_ui(1)
-    if random.randint(0, 100 - user.stats['Special']) > SUCCESS_RATE or \
+    if random.randint(0, 99 - user.stats['Special']) > SUCCESS_RATE or \
             'Sleep' in other.stats['Effects']:
         Printer.print_ui('  It\'s ineffective!')
     else:
@@ -26,4 +26,4 @@ def perform(user, other):
 
 def wakeup():
     """Determine whether the afflicted should wake up."""
-    return random.randint(0, 100) < WAKEUP_RATE
+    return random.randint(0, 99) < WAKEUP_RATE
