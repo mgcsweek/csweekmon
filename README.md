@@ -12,7 +12,7 @@ This will start a text crawl that shows the progress of the battle.
 
 The only reason why `python3` is used is for more cosmetic features: Unicode characters feature in the text crawl.
 
-You can use the `--no-verbose` flag to suppress most of the output, and `--delay <time>` to change the delay between messages being displayed. For example, to double the speed of the text crawl:
+You can use the `--no-verbose` flag to suppress most of the output, and `--delay=<time>` to change the delay between messages being displayed. For example, to double the speed of the text crawl:
 ```bash
 python3 run.py --delay=0.5
 ```
