@@ -8,9 +8,9 @@ from utils import Printer
 from csweekmon import Csweekmon
 
 STRATEGIES = [
-    strategies.HumanStrategy,
-    strategies.RandomStrategy,
-    strategies.SimpleStrategy
+    strategies.SimpleStrategy,
+    strategies.TankStrategy,
+    strategies.GlassCannonStrategy
 ]
 NSTRATEGIES = len(STRATEGIES)
 SCORES = dict()
@@ -45,7 +45,7 @@ def main():
                     print('   Battle skipped, at least one competitor was DQ!')
                     continue
                 outcome = game_engine.run_battle(csw1, csw2)
-                
+
                 if outcome == 1:
                     SCORES[csw1.name] += 3
                     print('   Winner: {}'.format(csw1.name))
