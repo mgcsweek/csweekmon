@@ -112,7 +112,7 @@ def process_effects(agent_cur):
             agent_cur.stats['Effects'].remove('Sleep')
             Printer.delay_ui(1)
         else:
-            Printer.print_ui('  {} is still asleep. 💤'.format(agent_cur.name))
+            Printer.print_ui('  {} is still asleep.'.format(agent_cur.name))
             will_skip = True
     if 'Poison' in agent_cur.stats['Effects']:
         damage = poison.latent(agent_cur)
