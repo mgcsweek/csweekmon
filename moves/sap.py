@@ -16,5 +16,5 @@ def perform(user, other):
         Printer.print_ui('  It\'s ineffective!')
     else:
         decrease = min(other.stats['Base Defense'], max(1, int(0.2 * user.stats['Special'])))
-        user.stats['Base Defense'] -= decrease
+        other.stats['Base Defense'] -= decrease
         Printer.print_ui('  The Defense of {} drops by {}.'.format(other.name, decrease))
