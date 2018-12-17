@@ -61,10 +61,10 @@ MAX_COST = 500
 STAT_POINTS = 100
 HP_W, PP_W, STR_W, DEF_W, SPEC_W = 1, 1, 2, 2, 2
 
-def verify(csweemon, max_cost=MAX_COST, stat_points=STAT_POINTS):
+def verify(csweekmon, max_cost=MAX_COST, stat_points=STAT_POINTS):
     """Verify that the players have valid initialisation."""
     item_cost = [x.COST for x in ITEMS]
-    stats = csweemon.stats
+    stats = csweekmon.stats
     health = stats['HP']
     ppoints = stats['PP']
     strength = stats['Strength']
