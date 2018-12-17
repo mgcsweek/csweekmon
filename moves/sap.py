@@ -12,7 +12,7 @@ CAN_DISABLE = True
 
 def perform(user, other):
     """Perform Sap."""
-    if random.randint(0, 100 - user.stats['Special']) > SUCCESS_RATE:
+    if random.randint(0, 99 - user.stats['Special']) > SUCCESS_RATE:
         Printer.print_ui('  It\'s ineffective!')
     else:
         decrease = min(other.stats['Base Defense'], max(1, int(0.2 * user.stats['Special'])))
