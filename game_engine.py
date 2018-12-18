@@ -186,7 +186,7 @@ def run_battle(agent_fst, agent_snd):
                 Printer.delay_ui(1)
                 if agent_cur.stats['PP'] < move.PP_COST:
                     Printer.print_ui('  But {} does not have enough PP!'.format(agent_cur.name))
-                elif 'Disabled' in agent_cur.stats['Effects'] and move.CAN_DISABLE:
+                elif 'Disable' in agent_cur.stats['Effects'] and move.CAN_DISABLE:
                     Printer.print_ui('  But {} is Disabled!'.format(agent_cur.name))
                 else:
                     agent_cur.stats['PP'] -= move.PP_COST
