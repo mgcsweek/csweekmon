@@ -40,12 +40,25 @@ def main():
                 battle_idx += 1
                 csw1, csw2 = Csweekmon(STRATEGIES[i], True), Csweekmon(STRATEGIES[j], False)
                 print('###Battle {}/{}: {} vs {}'.format(battle_idx, num_battles,
-                                                         csw1.name, csw2.name))
-                if SCORES[csw1.name] == -1 or SCORES[csw2.name] == -1:
-                    print('   Battle skipped, at least one competitor was DQ!')
-                    continue
-                outcome = game_engine.run_battle(csw1, csw2)
+                                                     csw1.name, csw2.name))
+                v1 = game_engine.verify(csw1)
+                v2 = game_engine.verify(csw2)
+                if v1 and v2:
+                    if SCORES[csw1.name] == -1 or SCORES[csw2.name] == -1:
+                        print('   Battle skipped, at least one competitor was DQ!')
+                        continue
+                    outcome = game_engine.run_battle(csw1, csw2)
+                elif (not v1) and (not v2):
+                    outcome = 0 # draw
+                    print('   Battle skipped, both strategies failed game engine verification')
+                elif (not v1):
+                    outcome = 2 # player 2 wins
+                    print('   Battle skipped, strategy {} failed game engine verification')
+                else:
+                    outcome = 1 # player 1 wins
+                    print('   Battle skipped, strategy {} failed game engine verification')
 
+                    
                 if outcome == 1:
                     SCORES[csw1.name] += 3
                     print('   Winner: {}'.format(csw1.name))
