@@ -14,6 +14,9 @@ STRATEGIES = [
 ]
 NSTRATEGIES = len(STRATEGIES)
 SCORES = dict()
+WINS = dict()
+DRAW = dict()
+LOSS = dict()
 
 def main():
     """Run tournament."""
@@ -30,6 +33,9 @@ def main():
         else:
             print('Strategy {} is valid.'.format(name))
         SCORES[name] = 0
+        WINS[name] = 0
+        DRAW[name] = 0
+        LOSS[name] = 0
 
     # Run the tournament
     battle_idx = 0
@@ -48,27 +54,35 @@ def main():
 
                 if outcome == 1:
                     SCORES[csw1.name] += 3
+                    WINS[csw1.name] += 1
+                    LOSS[csw2.name] += 1
                     print('   Winner: {}'.format(csw1.name))
                 elif outcome == 2:
                     SCORES[csw2.name] += 3
+                    WINS[csw2.name] += 1
+                    LOSS[csw1.name] += 1
                     print('   Winner: {}'.format(csw2.name))
                 else:
                     SCORES[csw1.name] += 1
                     SCORES[csw2.name] += 1
+                    DRAW[csw1.name] += 1
+                    DRAW[csw2.name] += 1
                     print('   It\'s a draw!')
 
     # print scoreboard
     print('SCOREBOARD:')
-    print('|-rank-|--------name--------|-pts-|-mpl-|')
-    print('-'*41)
+    print('|-rank-|--------name--------|-pts-|-mpl-|--v--|--d--|--l--|')
+    print('-'*59)
     matches_played = 2 * (NSTRATEGIES - 1)
     sorted_scores = sorted(SCORES.items(), key=lambda kv: kv[1], reverse=True)
     rank = 1
     for name, pts in sorted_scores:
-        print('|{}|{}|{}|{}|'.format(str(rank).center(6), name.center(20),
-                                     str(pts).center(5), str(matches_played).center(5)))
+        print('|{}|{}|{}|{}|{}|{}|{}|'.format(str(rank).center(6), name.center(20),
+                                              str(pts).center(5), str(matches_played).center(5),
+                                              str(WINS[name]).center(5), str(DRAW[name]).center(5),
+                                              str(LOSS[name]).center(5)))
         rank += 1
-    print('-'*41)
+    print('-'*59)
 
 if __name__ == "__main__":
     PARSER = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
