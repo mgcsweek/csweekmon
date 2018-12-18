@@ -21,7 +21,6 @@ def perform(user, other):
             base_damage = max(0, 1.2 * user.stats['Special'])
         else:
             base_damage = max(0, user.stats['Special'] - 0.2 * other.stats['Defense'])
-        Printer.print_ui(base_damage)
         damage = min(max(1, random.randint(int(0.8 * base_damage), int(1.2 * base_damage) + 1)),
                      other.stats['HP'])
         Printer.print_ui('  {} drains {} HP from {}.'.format(user.name, damage, other.name))
