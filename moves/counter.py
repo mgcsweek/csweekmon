@@ -29,7 +29,6 @@ def perform(user, other):
             Printer.print_ui('  It deals {} point of damage.'.format(damage))
         else:
             Printer.print_ui('  It deals {} points of damage.'.format(damage))
-        user.stats['Recent damage'] = damage
         other.stats['Recent damage'] = damage
         other.stats['HP'] -= damage
     else:
