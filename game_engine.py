@@ -100,9 +100,9 @@ def process_effects(agent_cur):
     """Process all status effects that may affect the current player.
 
     :param agent_cur: agent (AI instance) that needs to have effects inflicted
-    :return: returns a pair of boolean values (will_break, will_continue), stating whether to end
-    the battle or skip turn, respectively"""
-    will_break, will_skip = False, False
+    :return: returns a pair of boolean values (will_die, will_continue), stating whether to KO the
+    the agent or skip turn, respectively"""
+    will_die, will_skip = False, False
     agent_cur.stats['Defense'] = agent_cur.stats['Base Defense']
     if 'Sleep' in agent_cur.stats['Effects']:
         if 'Focus' in agent_cur.stats['Effects']:
@@ -126,24 +126,32 @@ def process_effects(agent_cur):
         agent_cur.stats['HP'] -= damage
         Printer.delay_ui(1)
         if agent_cur.stats['HP'] <= 0:
-            will_break = True
+            will_die = True
     if 'Disable' in agent_cur.stats['Effects']:
         Printer.print_ui('  {} is Disabled.'.format(agent_cur.name))
         Printer.delay_ui(1)
     # Focus not processed here
-    return will_break, will_skip
+    return will_die, will_skip
 
+def knock_out(agent_a, agent_b):
+    """Handle KO of first agent in line."""
+    Printer.print_ui('  {} is knocked out!'.format(agent_a.name))
+    Printer.delay_ui(2)
+    Printer.print_ui('  {} jumps into battle.'.format(agent_b.name))
+    agent_b.strategy.set_order_info(True)
+    return agent_b
 
-def run_battle(agent_fst, agent_snd):
+def run_battle(agent_fst_a, agent_snd_a, agent_fst_b, agent_snd_b):
     """Have two players fight each other."""
     Printer.delay_ui(1)
     Printer.print_ui('============================================================')
-    Printer.print_ui('  {} is walking...'.format(agent_fst.name))
+    Printer.print_ui('  {} is walking...'.format(agent_fst_a.name))
     Printer.delay_ui(1)
-    Printer.print_ui('        ...a wild {} appears!'.format(agent_snd.name))
+    Printer.print_ui('        ...a wild {} appears!'.format(agent_snd_a.name))
     turn_number = 0
-    max_turns = 50
+    max_turns = 80
     current_player = 2
+    agent_fst, agent_snd = agent_fst_a, agent_snd_a
     # player turns
     while turn_number < max_turns:
         turn_number += 1
@@ -158,11 +166,18 @@ def run_battle(agent_fst, agent_snd):
         write_stats(turn_number, agent_fst, agent_snd)
         Printer.delay_ui(1)
         # status effects logic
-        will_break, will_continue = process_effects(agent_cur)
-        if will_break:
-            agent_cur = agent_oth
+        will_die, will_continue = process_effects(agent_cur)
+        if will_die:
             current_player = 3 - current_player
-            break
+            if agent_cur == agent_fst_a:
+                agent_fst = knock_out(agent_fst_a, agent_fst_b)
+                continue
+            elif agent_cur == agent_snd_a:
+                agent_snd = knock_out(agent_snd_a, agent_snd_b)
+                continue
+            else:
+                agent_cur = agent_oth
+                break
         if will_continue:
             continue
         # pass status information to current player
@@ -171,7 +186,14 @@ def run_battle(agent_fst, agent_snd):
         if 'Focus' in agent_cur.stats['Effects']:
             focus.finally_perform(agent_cur, agent_oth)
             if agent_oth.stats['HP'] <= 0:
-                break
+                if agent_oth == agent_fst_a:
+                    current_player = 3 - current_player
+                    agent_fst = knock_out(agent_fst_a, agent_fst_b)
+                    continue
+                elif agent_oth == agent_snd_a:
+                    current_player = 3 - current_player
+                    agent_snd = knock_out(agent_snd_a, agent_snd_b)
+                    continue
             else:
                 continue
         action, detail = agent_cur.choose_action()
@@ -193,7 +215,15 @@ def run_battle(agent_fst, agent_snd):
                     agent_cur.stats['Previous move'] = move
                     move.perform(agent_cur, agent_oth)
                     if agent_oth.stats['HP'] <= 0:
-                        break
+                        if agent_oth == agent_fst_a:
+                            agent_fst = knock_out(agent_fst_a, agent_fst_b)
+                            current_player = 3 - current_player
+                            continue
+                        elif agent_oth == agent_snd_a:
+                            agent_snd = knock_out(agent_snd_a, agent_snd_b)
+                            continue
+                        else:
+                            break
         elif action == Action.USE_ITEM:   # use item
             if detail < 0 or detail >= MAX_ITEMS:
                 Printer.print_ui('  {} tries to use an item, but stumbles!'.format(agent_cur.name))

@@ -8,9 +8,9 @@ from utils import Printer
 from csweekmon import Csweekmon
 
 STRATEGIES = [
-    strategies.SimpleStrategy,
-    strategies.TankStrategy,
-    strategies.GlassCannonStrategy
+    (strategies.SimpleStrategy, strategies.RandomStrategy),
+    (strategies.TankStrategy, strategies.GlassCannonStrategy),
+    (strategies.HeavyHitStrategy, strategies.HugePowerStrategy)
 ]
 NSTRATEGIES = len(STRATEGIES)
 SCORES = dict()
@@ -22,20 +22,30 @@ def main():
     """Run tournament."""
     # Validate strategies and make sure they have unique names
     for strategy in STRATEGIES:
-        agent = Csweekmon(strategy, True)
-        name = agent.stats['Name']
-        if name in SCORES:
-            print('Name {} used in two strategies, please change this and rerun.'.format(name))
+        agent_a = Csweekmon(strategy[0], True)
+        agent_b = Csweekmon(strategy[1], True)
+        name_a = agent_a.stats['Name']
+        name_b = agent_b.stats['Name']
+        if name_a in SCORES:
+            print('Name {} used in two strategies, please change this and rerun.'.format(name_a))
             exit(0)
-        if not game_engine.verify(agent):
-            print("Strategy {} disqualified: failed game engine verification.".format(name))
-            SCORES[name] = -1
+        if name_b in SCORES:
+            print('Name {} used in two strategies, please change this and rerun.'.format(name_b))
+            exit(0)
+        SCORES[name_a] = 0
+        if not game_engine.verify(agent_a):
+            print("Strategy {} disqualified: failed game engine verification.".format(name_a))
+            SCORES[name_a] = -1
         else:
-            print('Strategy {} is valid.'.format(name))
-        SCORES[name] = 0
-        WINS[name] = 0
-        DRAW[name] = 0
-        LOSS[name] = 0
+            print('Strategy {} is valid.'.format(name_a))
+        if not game_engine.verify(agent_b):
+            print("Strategy {} disqualified: failed game engine verification.".format(name_b))
+            SCORES[name_a] = -1
+        else:
+            print('Strategy {} is valid.'.format(name_b))
+        WINS[name_a] = 0
+        DRAW[name_a] = 0
+        LOSS[name_a] = 0
 
     # Run the tournament
     battle_idx = 0
@@ -44,29 +54,33 @@ def main():
         for j in range(NSTRATEGIES):
             if i != j:
                 battle_idx += 1
-                csw1, csw2 = Csweekmon(STRATEGIES[i], True), Csweekmon(STRATEGIES[j], False)
-                print('###Battle {}/{}: {} vs {}'.format(battle_idx, num_battles,
-                                                         csw1.name, csw2.name))
-                if SCORES[csw1.name] == -1 or SCORES[csw2.name] == -1:
+                csw1_a, csw2_a = (Csweekmon(STRATEGIES[i][0], True),
+                                  Csweekmon(STRATEGIES[j][0], False))
+                csw1_b, csw2_b = (Csweekmon(STRATEGIES[i][1], False),
+                                  Csweekmon(STRATEGIES[j][1], False))
+                print('###Battle {}/{}: {} & {} vs {} & {}'.format(battle_idx, num_battles,
+                                                                   csw1_a.name, csw1_b.name,
+                                                                   csw2_a.name, csw2_b.name))
+                if SCORES[csw1_a.name] == -1 or SCORES[csw2_a.name] == -1:
                     print('   Battle skipped, at least one competitor was DQ!')
                     continue
-                outcome = game_engine.run_battle(csw1, csw2)
+                outcome = game_engine.run_battle(csw1_a, csw2_a, csw1_b, csw2_b)
 
                 if outcome == 1:
-                    SCORES[csw1.name] += 3
-                    WINS[csw1.name] += 1
-                    LOSS[csw2.name] += 1
-                    print('   Winner: {}'.format(csw1.name))
+                    SCORES[csw1_a.name] += 3
+                    WINS[csw1_a.name] += 1
+                    LOSS[csw2_a.name] += 1
+                    print('   Winner: {} & {}'.format(csw1_a.name, csw1_b.name))
                 elif outcome == 2:
-                    SCORES[csw2.name] += 3
-                    WINS[csw2.name] += 1
-                    LOSS[csw1.name] += 1
-                    print('   Winner: {}'.format(csw2.name))
+                    SCORES[csw2_a.name] += 3
+                    WINS[csw2_a.name] += 1
+                    LOSS[csw1_a.name] += 1
+                    print('   Winner: {} & {}'.format(csw2_a.name, csw2_b.name))
                 else:
-                    SCORES[csw1.name] += 1
-                    SCORES[csw2.name] += 1
-                    DRAW[csw1.name] += 1
-                    DRAW[csw2.name] += 1
+                    SCORES[csw1_a.name] += 1
+                    SCORES[csw2_a.name] += 1
+                    DRAW[csw1_a.name] += 1
+                    DRAW[csw2_a.name] += 1
                     print('   It\'s a draw!')
 
     # print scoreboard
