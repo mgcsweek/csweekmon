@@ -116,7 +116,7 @@ def strategy_input(suffix):
                   'Moves': CSW.stats['Moves'],
                   'Items': CSW.stats['Items']}
     with open('{}.py'.format(CONTESTANT_NAME.lower()), 'a') as f:
-        f.write('\n')
+        f.write('\n\n')
         f.write(STUB_TEXT.format(suffix, CSWEEKMON_NAME, STATS_DICT))
     f.close()
 
