@@ -12,5 +12,5 @@ CAN_DISABLE = True
 def perform(user, _):
     """Perform Harden."""
     increase = random.randint(2, 3 + int(0.1 * user.stats['Special'] * user.stats['Defense']))
-    user.stats['Defense'] += increase
+    user.stats['Base Defense'] += increase
     Printer.print_ui('  {} increases its Defense by {}.'.format(user.name, increase))
