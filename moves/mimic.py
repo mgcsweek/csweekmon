@@ -15,8 +15,8 @@ def perform(user, other):
     """Perform Mimic."""
     move = other.stats['Previous move']
     if move is not None:
-        print_ui('  {} mimics {} using {}.'.format(user.name, other.name, move.NAME))
-        delay_ui(1)
+        Printer.print_ui('  {} mimics {} using {}.'.format(user.name, other.name, move.NAME))
+        Printer.delay_ui(1)
         user.stats['Previous move'] = move
         move.perform(user, other)
     else:
